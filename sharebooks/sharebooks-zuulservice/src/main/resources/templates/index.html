@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" href="/webjars/bootstrap/3.2.0/css/bootstrap.css" />-->
+    <!--<script src="/webjars/jquery/2.1.1/jquery.js" > </script>-->
+    <!--<script src="/webjars/bootstrap/3.2.0/js/bootstrap.js"> </script>-->
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-3.3.5-dist/css/bootstrap.min.css" />
+    <!-- Custom styles for this template -->
+    <link href="../static/css/blog.css" rel="stylesheet" type="text/css">
+    <!-- <link href="css/lec.css" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-select.css">
+
+    <title>共享书单</title>
+
+    <style type="text/css">
+        /* Custom Styles */
+
+        body {
+            min-height: 1000px;
+            padding-top: 50px;
+        }
+
+        /*a标签去掉下划线*/
+        a:link {
+            text-decoration: none;
+        }
+        a:visited {
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+        a:active {
+            text-decoration: none;
+        }
+
+        .bg-li-0{
+            background-color:#9bc2e3; /*#9bc2e3  #337ab7 */
+            color: #ffffff;
+        }
+        .bg-li-1{
+            background-color:#f8f8f8;
+        }
+        .bg-li-2{
+            background-color:#d7e7f4;/*#80bfff f2f9ff*/
+        }
+        /*空白*/
+        .space{
+            height: 4px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand"><h2>共享书单</h2></a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row" >
+        <!--操作栏，增删改-->
+        <div id="section-operator" class="col-xs-3 col-sm-3 col-md-2 col-lg-2">
+            <ul id ="operator" class="nav">
+                <li class="bg-li-0"><a>书籍管理</a></li>
+                <li class="bg-li-2"><a href="javascript:addBook()">添加书籍</a></li>
+                <li class="bg-li-2"><a href="javascript:modifyBook()">修改书籍</a></li>
+                <li class="bg-li-2"><a href="javascript:deleteBook()">删除书籍</a></li>
+                <li class="bg-li-0"><a>书单管理</a></li>
+                <li class="bg-li-2"><a href="javascript:addShare()">添加书单</a></li>
+                <li class="bg-li-2"><a href="javascript:modifyShare()">修改书单</a></li>
+                <li class="bg-li-2"><a href="javascript:delteteShare()">删除书单</a></li>
+            </ul>
+        </div>
+
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 ">
+            <!--查询区-->
+            <div class="panel-body">
+                <!-- 设置查询条件 -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <form id="query-condition-book-id-form">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">书籍ID</span>
+                                    <input name="id" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <button id="btn-query-book1" type="button" class="btn btn-info">根据ID查询</button>
+                            </div>
+                        </form>
+                        <form id="query-condition-book-author-form">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">作者名</span>
+                                    <input name="bookName" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <button id="btn-query-book2" type="button" class="btn btn-info">根据作者查询</button>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <form id="query-condition-share-id-form">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">书单ID</span>
+                                    <input name="id" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <button id="btn-query-share1" type="button" class="btn btn-info">根据ID查询</button>
+                            </div>
+                        </form>
+                        <form id="query-condition-share-author-form">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">共享者</span>
+                                    <input name="bookName" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <button id="btn-query-share2" type="button" class="btn btn-info">根据作者查询</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <!--显示区-->
+            <div class="panel-body">
+                <div id="view-section"></div>
+            </div>
+
+
+        </div>
+
+        <!-- 模态框 -->
+        <div class="modal fade" id="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="modal-btn-submit">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    <!-- Bootstrap core JavaScript
+================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../static/js/jquery-2.1.4.min.js"></script>
+    <script src="../static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery.twbsPagination.js"></script>
+    <script src="../static/js/bootstrap-select.js"></script>
+
+    <script src="../static/js/base.js"></script>
+    <script src ="../static/js/sharebooks.js"></script>
+
+    <script>
+
+
+    </script>
+
+
+</body>
+</html>
