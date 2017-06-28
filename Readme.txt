@@ -25,6 +25,17 @@ http://www.imooc.com/learn/824
 http://blog.csdn.net/column/details/15197.html
 
 
+-------6.28日更改--------
+目前将mysql数据库服务也封装到同一个镜像里面
+以此，简化验证过程
+1.安装镜像
+docker pull tianjiqx/sharebooks
+2.启动镜像
+docker run --name some-sharebooks -p 3306:3306 -p 9001:9001 -p 8888:8888 -p 8765:8765 -p 8764:8764 -p 8761:8761 -p 9501:9501 -p 8080:8080   -d tianjiqx/sharebooks 
+3.查看已经启动的服务（可能需要等待几分钟）
+http://192.168.1.2:8761/  （这里的ip以实际机器的ip为准）
+
+
 -----------
 补充：
 另外将各个模块拆分安装构建方式如下

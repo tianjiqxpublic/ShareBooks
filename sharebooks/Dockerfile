@@ -3,6 +3,23 @@ FROM laitian912/centos6-java8:8u66
 MAINTAINER tianjiqx "quxingyy@126.com"
 VOLUME /tmp
 
+#安装mysql
+#RUN yum -y upgrade
+RUN yum install -y http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm
+RUN yum install -y mysql-community-server
+
+RUN rm /etc/my.cnf && mkdir -p /etc/mysql/conf.d
+ADD my.cnf /etc/mysql/my.cnf
+RUN chmod 664 /etc/mysql/my.cnf
+ADD setup_mysql.sh /usr/local/bin/setup_mysql.sh
+RUN chmod +x /usr/local/bin/setup_mysql.sh
+RUN "/usr/local/bin/setup_mysql.sh"
+
+RUN echo "127.0.0.1  dbmysql" >> /etc/hosts
+
+
+
+#安装 supervisor
 RUN wget --no-check-certificate https://bootstrap.pypa.io/ez_setup.py -O - |  python
 
 RUN easy_install supervisor
@@ -34,6 +51,7 @@ RUN chmod a+x sharebooks-zuulservice-app.jar
 #RUN bash -c 'touch /app.jar'
 #ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/sharebooks-bookservice-app.jar"]
 
+EXPOSE 3306
 EXPOSE 9001
 EXPOSE 8888
 EXPOSE 8765
